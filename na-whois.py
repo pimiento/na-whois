@@ -23,16 +23,22 @@ def input_testing(test_input):
         return test_input_obr
     else:
         return False
-        
+
+
 @app.route('/', methods=['GET'])
 def index():
-    """view for user"""
-    if request.args.get('domain', ''):
-        search_domain = testing_input(request.args.get('domain', ''))
+    u"""view for user
+
+    GET-params:
+      domain: search whois-info for this domain
+    """
+    domain = request.args.get('domain')
+    if domain:
+        search_domain = input_testing(domain)
         if search_domain:
             info_whois = get_whois(search_domain).decode("utf-8")
             info_whois_template = info_whois.split("\n")
-            return render_template('main.html', info_whois=info_whois_template, 
+            return render_template('main.html', info_whois=info_whois_template,
                                    input_domain=search_domain,
                                    novalid=False)
         else:
