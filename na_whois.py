@@ -35,7 +35,7 @@ def index():
     GET-params:
       domain: search whois-info for this domain
     """
-    domain = request.args.get('domain')
+    domain = request.args.get('what')
     if domain:
         search_domain = input_testing(domain)
         if search_domain:
