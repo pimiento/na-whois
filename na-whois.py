@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import re
 import subprocess
 from flask import Flask, request, render_template
@@ -7,11 +6,13 @@ from flask import Flask, request, render_template
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+
 def get_whois(domain_or_ip):
     """get whois information of domain or ip"""
     return  subprocess.Popen(["whois", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
 
-def testing_input(test_input):
+
+def input_testing(test_input):
     """test and split input user"""
     test_input_obr = test_input.strip()
     if re.compile(u'^http:\/\/').match(test_input_obr):
@@ -41,6 +42,3 @@ def index():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-        
