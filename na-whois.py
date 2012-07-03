@@ -9,7 +9,7 @@ app.config.from_object(__name__)
 
 def get_whois(domain_or_ip):
     """get whois information of domain or ip"""
-    return  subprocess.Popen(["whois", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
+    return  subprocess.Popen(["whois", "-H", domain_or_ip], stdout=subprocess.PIPE).communicate()[0]
 
 
 def input_testing(test_input):
