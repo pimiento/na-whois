@@ -2,9 +2,12 @@
 import re
 import subprocess
 from flask import Flask, request, render_template
+from werkzeug.contrib.cache import MemcachedCache
 
 app = Flask(__name__)
-app.config.from_object(__name__)
+app.config.from_object('settings')
+MEMCACHE_IP = app.config['MEMCACHE_IP']
+cache = MemcachedCache([MEMCACHE_IP])
 
 
 def get_whois(domain_or_ip):
@@ -36,11 +39,13 @@ def index():
     if domain:
         search_domain = input_testing(domain)
         if search_domain:
-            info_whois = get_whois(search_domain).decode("utf-8")
+            info_whois = cache.get(u'%s_info_whois' % search_domain)
+            if not info_whois:
+                info_whois = get_whois(search_domain).decode("utf-8")
+                cache.set(u'%s_info_whois' % search_domain, info_whois, timeout=60 * 15)
             info_whois_template = info_whois.split("\n")
             return render_template('main.html', info_whois=info_whois_template,
-                                   input_domain=search_domain,
-                                   novalid=False)
+                                   input_domain=search_domain, novalid=False)
         else:
             return render_template(
                 'main.html', input_domain=False,
