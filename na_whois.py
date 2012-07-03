@@ -33,7 +33,7 @@ def index():
     u"""view for user
 
     GET-params:
-      domain: search whois-info for this domain
+      what: search whois-info for this domain or ip
     """
     domain = request.args.get('what')
     if domain:
